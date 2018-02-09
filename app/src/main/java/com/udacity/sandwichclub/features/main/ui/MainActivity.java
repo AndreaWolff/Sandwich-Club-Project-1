@@ -45,13 +45,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
 
     @Override
     public void navigateToSandwich(final int position) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Intent intent = new Intent(MainActivity.this, DetailsActivity.class);
-                intent.putExtra(EXTRA_POSITION, position);
-                startActivity(intent);
-            }
-        });
+        Intent intent = new Intent(MainActivity.this, DetailsActivity.class);
+        intent.putExtra(EXTRA_POSITION, position);
+        startActivity(intent);
     }
 }
