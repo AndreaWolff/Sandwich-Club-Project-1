@@ -20,6 +20,8 @@ public class JsonUtils {
     private final static String JSON_INGREDIENTS_KEY = "ingredients";
 
     public static Sandwich parseSandwichJson(String json) {
+        JSONObject sandwichObject = null;
+        JSONObject sandwichName = null;
         String sandwichMainName = "";
         List<String> sandwichAlsoKnownAs = new ArrayList<>();
         String sandwichPlaceOfOrigin = "";
@@ -28,26 +30,38 @@ public class JsonUtils {
         List<String> sandwichIngredients = new ArrayList<>();
 
         try {
-            JSONObject sandwichObject = new JSONObject(json);
-            JSONObject sandwichName = sandwichObject.getJSONObject(JSON_NAME_KEY);
+            sandwichObject = new JSONObject(json);
+            sandwichName = sandwichObject.getJSONObject(JSON_NAME_KEY);
             sandwichMainName = sandwichName.getString(JSON_MAIN_NAME_KEY);
-
-            JSONArray sandwichAlsoKnownAsArray = sandwichName.getJSONArray(JSON_ALSO_KNOWN_AS_KEY);
-            sandwichAlsoKnownAs = new ArrayList<>();
-            for (int i = 0; i < sandwichAlsoKnownAsArray.length(); i++) {
-                String val = sandwichAlsoKnownAsArray.getString(i);
-                sandwichAlsoKnownAs.add(val);
-            }
 
             sandwichPlaceOfOrigin = sandwichObject.optString(JSON_PLACE_OF_ORIGIN_KEY);
             sandwichDescription = sandwichObject.optString(JSON_DESCRIPTION_KEY);
             sandwichImage = sandwichObject.optString(JSON_IMAGE_KEY);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
-            JSONArray sandwichIngredientsArray = sandwichObject.getJSONArray(JSON_INGREDIENTS_KEY);
-            sandwichIngredients = new ArrayList<>();
-            for (int i = 0; i < sandwichIngredientsArray.length(); i++) {
-                String val = sandwichIngredientsArray.getString(i);
-                sandwichIngredients.add(val);
+        try {
+            if (sandwichName != null) {
+                JSONArray sandwichAlsoKnownAsArray = sandwichName.getJSONArray(JSON_ALSO_KNOWN_AS_KEY);
+                sandwichAlsoKnownAs = new ArrayList<>();
+                for (int i = 0; i < sandwichAlsoKnownAsArray.length(); i++) {
+                    String val = sandwichAlsoKnownAsArray.getString(i);
+                    sandwichAlsoKnownAs.add(val);
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            if (sandwichObject != null) {
+                JSONArray sandwichIngredientsArray = sandwichObject.getJSONArray(JSON_INGREDIENTS_KEY);
+                sandwichIngredients = new ArrayList<>();
+                for (int i = 0; i < sandwichIngredientsArray.length(); i++) {
+                    String val = sandwichIngredientsArray.getString(i);
+                    sandwichIngredients.add(val);
+                }
             }
         } catch (JSONException e) {
             e.printStackTrace();

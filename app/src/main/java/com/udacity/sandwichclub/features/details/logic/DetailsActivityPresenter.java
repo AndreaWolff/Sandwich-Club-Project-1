@@ -1,5 +1,8 @@
 package com.udacity.sandwichclub.features.details.logic;
 
+import android.os.Handler;
+import android.os.Looper;
+
 import com.udacity.sandwichclub.R;
 import com.udacity.sandwichclub.features.details.DetailsActivityContract;
 import com.udacity.sandwichclub.features.details.DetailsActivityContract.View;
@@ -12,11 +15,15 @@ import java.util.List;
 public class DetailsActivityPresenter implements DetailsActivityContract.Presenter {
 
     private WeakReference<View> viewWeakReference;
-
     private Sandwich sandwich;
 
     public DetailsActivityPresenter(View view) {
         viewWeakReference = new WeakReference<>(view);
+    }
+
+    @Override
+    public void disconnectView() {
+        viewWeakReference = new WeakReference<>(null);
     }
 
     @Override

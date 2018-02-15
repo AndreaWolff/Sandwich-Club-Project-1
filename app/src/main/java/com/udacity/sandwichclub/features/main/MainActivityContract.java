@@ -8,5 +8,7 @@ public interface MainActivityContract {
 
     interface Presenter {
         void onSandwichSelected(int position);
+
+        void disconnectView();
     }
 }

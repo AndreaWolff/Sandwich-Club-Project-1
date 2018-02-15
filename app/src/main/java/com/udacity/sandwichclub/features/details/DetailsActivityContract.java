@@ -32,5 +32,7 @@ public interface DetailsActivityContract {
         void getSandwichFromJson(String json);
 
         void populateScreen();
+
+        void disconnectView();
     }
 }

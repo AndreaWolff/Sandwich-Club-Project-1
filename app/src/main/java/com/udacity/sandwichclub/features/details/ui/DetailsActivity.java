@@ -22,27 +22,30 @@ public class DetailsActivity extends AppCompatActivity implements DetailsActivit
 
     private static final int DEFAULT_POSITION = -1;
 
+    private DetailsActivityContract.Presenter presenter;
+
     @BindView(R.id.textview_also_known_as) TextView alsoKnownAsTextView;
     @BindView(R.id.textview_ingredients) TextView ingredientsTextView;
     @BindView(R.id.textview_description) TextView descriptionTextView;
     @BindView(R.id.textview_place_of_origin) TextView placeOfOriginTextView;
     @BindView(R.id.imageview_sandwich) ImageView sandwichImageView;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
         ButterKnife.bind(this);
 
-        DetailsActivityContract.Presenter presenter = new DetailsActivityPresenter(this);
+        presenter = new DetailsActivityPresenter(this);
 
         Intent intent = getIntent();
         if (intent == null) {
             presenter.closeOnError();
         }
 
-        int position = intent != null ? intent.getIntExtra(EXTRA_POSITION, DEFAULT_POSITION) : DEFAULT_POSITION;
+        int position = intent != null ?
+                intent.getIntExtra(EXTRA_POSITION, DEFAULT_POSITION) : DEFAULT_POSITION;
+
         if (position == DEFAULT_POSITION) {
             presenter.closeOnError();
             return;
@@ -55,118 +58,56 @@ public class DetailsActivity extends AppCompatActivity implements DetailsActivit
     }
 
 
-    @Override
-    public void finishActivity() {
+    @Override protected void onDestroy() {
+        super.onDestroy();
+        presenter.disconnectView();
+    }
+
+    @Override public void finishActivity() {
         Toast.makeText(this, R.string.detail_error_message, LENGTH_SHORT).show();
-
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                finish();
-            }
-        });
+        finish();
     }
 
-    @Override
-    public void renderAlsoKnownAs(final String alsoKnownAsNames) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                alsoKnownAsTextView.append(alsoKnownAsNames);
-            }
-        });
+    @Override public void renderAlsoKnownAs(final String alsoKnownAsNames) {
+        alsoKnownAsTextView.append(alsoKnownAsNames);
     }
 
-    @Override
-    public void renderIngredients(final String ingredients) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                ingredientsTextView.append(ingredients);
-            }
-        });
+    @Override public void renderIngredients(final String ingredients) {
+        ingredientsTextView.append(ingredients);
     }
 
-    @Override
-    public void renderDescription(final String description) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                descriptionTextView.setText(description);
-            }
-        });
+    @Override public void renderDescription(final String description) {
+        descriptionTextView.setText(description);
     }
 
-    @Override
-    public void renderPlaceOfOrigin(final String placeOfOrigin) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                placeOfOriginTextView.setText(placeOfOrigin);
-            }
-        });
+    @Override public void renderPlaceOfOrigin(final String placeOfOrigin) {
+        placeOfOriginTextView.setText(placeOfOrigin);
     }
 
-    @Override
-    public void renderTitle(final String mainName) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                setTitle(mainName);
-            }
-        });
+    @Override public void renderTitle(final String mainName) {
+        setTitle(mainName);
     }
 
-    @Override
-    public void renderSandwichImage(final String image) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Picasso.with(DetailsActivity.this)
-                        .load(image)
-                        .placeholder(R.color.image_loading_background)
-                        .into(sandwichImageView);
-            }
-        });
+    @Override public void renderSandwichImage(final String image) {
+        Picasso.with(this)
+               .load(image)
+               .placeholder(R.color.image_loading_background)
+               .into(sandwichImageView);
     }
 
-    @Override
-    public void displayNoOtherNames(final int noOtherNames) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                alsoKnownAsTextView.setText(getString(noOtherNames));
-            }
-        });
+    @Override public void displayNoOtherNames(final int noOtherNames) {
+        alsoKnownAsTextView.setText(getString(noOtherNames));
     }
 
-    @Override
-    public void displayNoIngredients(final int noIngredients) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                ingredientsTextView.setText(getString(noIngredients));
-            }
-        });
+    @Override public void displayNoIngredients(final int noIngredients) {
+        ingredientsTextView.setText(getString(noIngredients));
     }
 
-    @Override
-    public void displayNoPlaceOfOrigin(final int noPlaceOfOrigin) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                placeOfOriginTextView.setText(getString(noPlaceOfOrigin));
-            }
-        });
+    @Override public void displayNoPlaceOfOrigin(final int noPlaceOfOrigin) {
+        placeOfOriginTextView.setText(getString(noPlaceOfOrigin));
     }
 
-    @Override
-    public void displayNoDescription(final int noDescription) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                descriptionTextView.setText(getString(noDescription));
-            }
-        });
+    @Override public void displayNoDescription(final int noDescription) {
+        descriptionTextView.setText(getString(noDescription));
     }
 }

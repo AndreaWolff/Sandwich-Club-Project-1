@@ -43,6 +43,11 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         listView.setAdapter(adapter);
     }
 
+    @Override protected void onDestroy() {
+        super.onDestroy();
+        presenter.disconnectView();
+    }
+
     @Override
     public void navigateToSandwich(final int position) {
         Intent intent = new Intent(MainActivity.this, DetailsActivity.class);

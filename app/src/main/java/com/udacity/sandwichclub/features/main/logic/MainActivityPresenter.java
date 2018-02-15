@@ -21,4 +21,8 @@ public class MainActivityPresenter implements MainActivityContract.Presenter {
             navigation.navigateToSandwich(position);
         }
     }
+
+    @Override public void disconnectView() {
+        navigationWeakReference = new WeakReference<>(null);
+    }
 }
